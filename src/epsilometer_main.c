@@ -54,8 +54,30 @@ volatile uint32_t pendingSamples = 0; // counter in the background IRQ
 volatile uint32_t samplesSent    = 0;    // counter in the foreground IRQ
 volatile uint32_t numSync        = 0;    // number of sync signal sent
 volatile uint32_t flagSync       = 0;    // flag to reset pending sample in the interrupt.
-//int pendingSamples;
 
+
+// Waiting Variable for Clock Setting
+volatile uint32_t gulclockset=0;
+
+// CMU Interrupt Handler
+void CMU_IRQHandler(void)
+{
+  // Read Interrupt flags
+  uint32_t intFlags = CMU_IntGet();
+
+  // Clear interrupt flags register
+  CMU_IntClear(CMU_IF_HFXORDY | CMU_IF_HFRCORDY);
+
+    // Check if the Clock Source for External Crystal
+  // is Ready or Not?
+  if (intFlags & CMU_IF_HFXORDY)
+  {
+    CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
+    CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);
+        //Inform that We are Done
+        gulclockset = 1;
+  }
+}
 
 /******************************************************************************
  * @brief
@@ -81,6 +103,23 @@ int main(void) {
 	GPIO_PinModeSet(gpioPortF, 5, gpioModePushPull, 1); // Enable 485 Transmitter
 	GPIO_PinModeSet(gpioPortA, 2,	gpioModePushPull, 1); // PA2 in output mode to send the MCLOCK  to ADC
 	GPIO_PinModeSet(gpioPortB, 7, gpioModePushPull, 1);   // PB7 in output mode to send the SYNC away
+
+	/* set up the 20 MHz clock */
+	CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_HFXOMODE_MASK)| CMU_CTRL_HFXOMODE_DIGEXTCLK;
+
+    // Enable the External Oscillator , true for enabling the O and false to not wait
+    CMU_OscillatorEnable(cmuOsc_HFXO,true,false);
+
+    // Enable interrupts for HFXORDY
+    CMU_IntEnable(CMU_IF_HFXORDY);
+
+    // Enable CMU interrupt vector in NVIC
+    NVIC_EnableIRQ(CMU_IRQn);
+
+    // Wait for the HFXO Clock to be Stable - Or infinite in case of error
+    while(gulclockset != 1);
+    CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_CLKOUTSEL0_MASK)| CMU_CTRL_CLKOUTSEL0_HFCLK16;
+    CMU->ROUTE =(CMU->ROUTE &~_CMU_ROUTE_CLKOUT0PEN_MASK)| CMU_ROUTE_CLKOUT0PEN;
 
     for (int i=0;i<8;i++){
     	AD7124_ChipSelect(sensors[i], LHI); // bring them all high
@@ -137,19 +176,28 @@ int main(void) {
 	/* Configure TIMER */
 	//TIMER_Init(TIMER0, &timerInit);
 	TIMER0->CTRL =(TIMER0->CTRL &~_TIMER_CTRL_CLKSEL_MASK)| TIMER_CTRL_CLKSEL_PRESCHFPERCLK;
+	// DIV 1 core clock divided by 1
 	TIMER0->CTRL =(TIMER0->CTRL &~_TIMER_CTRL_PRESC_MASK)| TIMER_CTRL_PRESC_DIV1;
+	//
 	TIMER0->CTRL =(TIMER0->CTRL &~_TIMER_CTRL_MODE_MASK)| TIMER_CTRL_MODE_UP;
+	// define the top value
 	TIMER0->TOP =(TIMER0->TOP &~_TIMER_TOP_MASK)| TIMER_TOP_TOP_DEFAULT;
-    TIMER0->TOP =(TIMER0->TOP &~_TIMER_TOP_MASK)| 0xb;
+    // 2 * 16 cycles 20MHz = 625 kHz -> ok for ADC
+	TIMER0->TOP =(TIMER0->TOP &~_TIMER_TOP_MASK)| 0xf;
+    // setup the CC as output compare
 	TIMER0->CC[2].CTRL =(TIMER0->CC[2].CTRL &~_TIMER_CC_CTRL_MODE_MASK)| TIMER_CC_CTRL_MODE_OUTPUTCOMPARE;
+	//
 	TIMER0->CC[2].CTRL =(TIMER0->CC[2].CTRL &~_TIMER_CC_CTRL_CMOA_MASK)| TIMER_CC_CTRL_CMOA_TOGGLE;
+	//
 	TIMER0->CC[2].CCV =(TIMER0->CC[2].CCV &~_TIMER_CC_CCV_CCV_MASK)| TIMER_CC_CCV_CCV_DEFAULT;
+	//
 	TIMER0->CC[2].CTRL =(TIMER0->CC[2].CTRL &~_TIMER_CC_CTRL_OUTINV_MASK)| TIMER_CC_CTRL_OUTINV;
+	// setup CCV to trigger TIMER1 with 90 deg phase shift -> 90 deg shift = half of a period = 0xf/2 =0x8
 	TIMER0->CC[2].CCV =(TIMER0->CC[2].CCV &~_TIMER_CC_CCV_CCV_MASK)| 0x6;  // control the phase of TIMER0
 	TIMER0->ROUTE =(TIMER0->ROUTE &~_TIMER_ROUTE_LOCATION_MASK)| TIMER_ROUTE_LOCATION_LOC0;
 	TIMER0->ROUTE =(TIMER0->ROUTE &~_TIMER_ROUTE_MASK)| TIMER_ROUTE_CC2PEN;
 
-	//configure TIMER1 to help SYNC the ADC
+	//configure TIMER1. TIMER1 is SYNC for the ADC
 	TIMER1->CTRL =(TIMER1->CTRL &~_TIMER_CTRL_MODE_MASK)| TIMER_CTRL_MODE_UP;
 	TIMER1->CTRL =(TIMER1->CTRL &~_TIMER_CTRL_OSMEN_MASK)| TIMER_CTRL_OSMEN;
     TIMER1->CTRL =(TIMER1->CTRL &~_TIMER_CTRL_SYNC_MASK)| TIMER_CTRL_SYNC_DEFAULT;
@@ -159,6 +207,7 @@ int main(void) {
 	TIMER1->CC[0].CTRL =(TIMER1->CC[0].CTRL &~_TIMER_CC_CTRL_OUTINV_MASK)| TIMER_CC_CTRL_OUTINV;
 	TIMER1->CC[0].CTRL =(TIMER1->CC[0].CTRL &~_TIMER_CC_CTRL_CMOA_MASK)| TIMER_CC_CTRL_CMOA_TOGGLE;
 	TIMER1->CC[0].CTRL =(TIMER1->CC[0].CTRL &~_TIMER_CC_CTRL_INSEL_MASK)| TIMER_CC_CTRL_INSEL_PIN;
+	// set up top as 13 cycle of TIMER0
 	TIMER1->TOP =(TIMER1->TOP &~_TIMER_TOP_MASK)| 0x13;
 	TIMER1->ROUTE =(TIMER1->ROUTE &~_TIMER_ROUTE_MASK)| TIMER_ROUTE_CC0PEN;
 	TIMER1->ROUTE =(TIMER1->ROUTE &~_TIMER_ROUTE_LOCATION_MASK)| TIMER_ROUTE_LOCATION_LOC3;
@@ -180,7 +229,7 @@ int main(void) {
 	 * Primitive Sampling routine
 	 * ***************************************************************/
 
-	int pendingTimeout = 0;
+	//int pendingTimeout = 0;
 	AD7124_StartConversion(sensors[boardSetup_ptr->numSensor]);
 
 	/****************************************************************

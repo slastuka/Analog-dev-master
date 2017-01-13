@@ -299,8 +299,7 @@ void GPIO_ODD_IRQHandler(void) {
 	USART_SpiTransfer(USART0, cmdBuffer);
 	while (bytesIn > 0) {
 		dataByte=USART_SpiTransfer(USART0, 0x0);
-
-//sml		dataByte=(pendingSamples%500)>>8*(bytesIn-1);
+		dataByte=(pendingSamples%500)>>8*(bytesIn-1);
 		USART_Tx(USART1, dataByte);
 		bytesIn --;
 	}

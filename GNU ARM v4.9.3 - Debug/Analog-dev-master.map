@@ -337,7 +337,7 @@ END GROUP
 LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtend.o
 LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtn.o
 
-.text           0x0000000000000000     0x20d8
+.text           0x0000000000000000     0x2218
  *(.vectors)
  .vectors       0x0000000000000000       0xe0 ./CMSIS/EFM32WG/startup_efm32wg.o
                 0x0000000000000000                __Vectors
@@ -391,7 +391,6 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
                 0x00000000000001dc                SVC_Handler
                 0x00000000000001dc                DAC0_IRQHandler
                 0x00000000000001dc                UART1_RX_IRQHandler
-                0x00000000000001dc                CMU_IRQHandler
                 0x00000000000001dc                EBI_IRQHandler
                 0x00000000000001dc                LESENSE_IRQHandler
                 0x00000000000001dc                AES_IRQHandler
@@ -545,36 +544,47 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
                 0x0000000000001970       0x38 ./src/epsilometer_analog.o
                 0x0000000000001970                setupGpioInt
  .text.GPIO_ODD_IRQHandler
-                0x00000000000019a8       0xd0 ./src/epsilometer_analog.o
+                0x00000000000019a8       0xf4 ./src/epsilometer_analog.o
                 0x00000000000019a8                GPIO_ODD_IRQHandler
  .text.NVIC_EnableIRQ
-                0x0000000000001a78       0x30 ./src/epsilometer_coms.o
+                0x0000000000001a9c       0x30 ./src/epsilometer_coms.o
  .text.NVIC_ClearPendingIRQ
-                0x0000000000001aa8       0x34 ./src/epsilometer_coms.o
+                0x0000000000001acc       0x34 ./src/epsilometer_coms.o
  .text.UART_Setup
-                0x0000000000001adc       0x98 ./src/epsilometer_coms.o
-                0x0000000000001adc                UART_Setup
+                0x0000000000001b00       0x98 ./src/epsilometer_coms.o
+                0x0000000000001b00                UART_Setup
+ .text.NVIC_EnableIRQ
+                0x0000000000001b98       0x30 ./src/epsilometer_main.o
+ .text.CMU_IntClear
+                0x0000000000001bc8       0x1c ./src/epsilometer_main.o
+ .text.CMU_IntEnable
+                0x0000000000001be4       0x24 ./src/epsilometer_main.o
+ .text.CMU_IntGet
+                0x0000000000001c08       0x18 ./src/epsilometer_main.o
  .text.CHIP_Init
-                0x0000000000001b74        0xc ./src/epsilometer_main.o
- .text.main     0x0000000000001b80      0x468 ./src/epsilometer_main.o
-                0x0000000000001b80                main
- .text.exit     0x0000000000001fe8       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-exit.o)
-                0x0000000000001fe8                exit
+                0x0000000000001c20        0xc ./src/epsilometer_main.o
+ .text.CMU_IRQHandler
+                0x0000000000001c2c       0x40 ./src/epsilometer_main.o
+                0x0000000000001c2c                CMU_IRQHandler
+ .text.main     0x0000000000001c6c      0x4bc ./src/epsilometer_main.o
+                0x0000000000001c6c                main
+ .text.exit     0x0000000000002128       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-exit.o)
+                0x0000000000002128                exit
  .text.__libc_init_array
-                0x0000000000002010       0x4c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-init.o)
-                0x0000000000002010                __libc_init_array
- .text.memset   0x000000000000205c       0x10 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-memset.o)
-                0x000000000000205c                memset
- .text._exit    0x000000000000206c        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libnosys.a(_exit.o)
-                0x000000000000206c                _exit
+                0x0000000000002150       0x4c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-init.o)
+                0x0000000000002150                __libc_init_array
+ .text.memset   0x000000000000219c       0x10 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-memset.o)
+                0x000000000000219c                memset
+ .text._exit    0x00000000000021ac        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libnosys.a(_exit.o)
+                0x00000000000021ac                _exit
  *(.init)
- .init          0x0000000000002070        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crti.o
-                0x0000000000002070                _init
- .init          0x0000000000002074        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtn.o
+ .init          0x00000000000021b0        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crti.o
+                0x00000000000021b0                _init
+ .init          0x00000000000021b4        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtn.o
  *(.fini)
- .fini          0x000000000000207c        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crti.o
-                0x000000000000207c                _fini
- .fini          0x0000000000002080        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtn.o
+ .fini          0x00000000000021bc        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crti.o
+                0x00000000000021bc                _fini
+ .fini          0x00000000000021c0        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -586,47 +596,47 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
  *(SORT(.dtors.*))
  *(.dtors)
  *(.rodata*)
- .rodata        0x0000000000002088       0x18 ./src/epsilometer_analog.o
- .rodata        0x00000000000020a0       0x2c ./src/epsilometer_main.o
+ .rodata        0x00000000000021c8       0x18 ./src/epsilometer_analog.o
+ .rodata        0x00000000000021e0       0x2c ./src/epsilometer_main.o
  .rodata.str1.1
-                0x00000000000020cc        0x2 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-impure.o)
- *fill*         0x00000000000020ce        0x2 
+                0x000000000000220c        0x2 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-impure.o)
+ *fill*         0x000000000000220e        0x2 
  .rodata._global_impure_ptr
-                0x00000000000020d0        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-impure.o)
-                0x00000000000020d0                _global_impure_ptr
+                0x0000000000002210        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-impure.o)
+                0x0000000000002210                _global_impure_ptr
  *(.eh_frame*)
- .eh_frame      0x00000000000020d4        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtbegin.o
- .eh_frame      0x00000000000020d4        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtend.o
+ .eh_frame      0x0000000000002214        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtbegin.o
+ .eh_frame      0x0000000000002214        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtend.o
 
-.glue_7         0x00000000000020d8        0x0
+.glue_7         0x0000000000002218        0x0
  .glue_7        0x0000000000000000        0x0 linker stubs
 
-.glue_7t        0x00000000000020d8        0x0
+.glue_7t        0x0000000000002218        0x0
  .glue_7t       0x0000000000000000        0x0 linker stubs
 
-.vfp11_veneer   0x00000000000020d8        0x0
+.vfp11_veneer   0x0000000000002218        0x0
  .vfp11_veneer  0x0000000000000000        0x0 linker stubs
 
-.v4_bx          0x00000000000020d8        0x0
+.v4_bx          0x0000000000002218        0x0
  .v4_bx         0x0000000000000000        0x0 linker stubs
 
-.iplt           0x00000000000020d8        0x0
+.iplt           0x0000000000002218        0x0
  .iplt          0x0000000000000000        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x00000000000020d8                __exidx_start = .
+                0x0000000000002218                __exidx_start = .
 
-.ARM.exidx      0x00000000000020d8        0x8
+.ARM.exidx      0x0000000000002218        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x00000000000020d8        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/crt0.o
-                0x00000000000020e0                __exidx_end = .
-                0x00000000000020e0                __etext = .
+ .ARM.exidx     0x0000000000002218        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/crt0.o
+                0x0000000000002220                __exidx_end = .
+                0x0000000000002220                __etext = .
 
-.rel.dyn        0x00000000000020e0        0x0
+.rel.dyn        0x0000000000002220        0x0
  .rel.iplt      0x0000000000000000        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtbegin.o
 
-.data           0x0000000020000000      0x268 load address 0x00000000000020e0
+.data           0x0000000020000000      0x268 load address 0x0000000000002220
                 0x0000000020000000                __data_start__ = .
  *(vtable)
  *(.data*)
@@ -684,10 +694,10 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
                 0x0000000020000268                . = ALIGN (0x4)
                 0x0000000020000268                __data_end__ = .
 
-.igot.plt       0x0000000020000268        0x0 load address 0x0000000000002348
+.igot.plt       0x0000000020000268        0x0 load address 0x0000000000002488
  .igot.plt      0x0000000000000000        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/armv7e-m/softfp/crtbegin.o
 
-.bss            0x0000000020000268       0x28 load address 0x0000000000002348
+.bss            0x0000000020000268       0x2c load address 0x0000000000002488
                 0x0000000020000268                . = ALIGN (0x4)
                 0x0000000020000268                __bss_start__ = .
  *(.bss*)
@@ -697,24 +707,27 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
  .bss.pendingSamples
                 0x0000000020000288        0x4 ./src/epsilometer_main.o
                 0x0000000020000288                pendingSamples
+ .bss.gulclockset
+                0x000000002000028c        0x4 ./src/epsilometer_main.o
+                0x000000002000028c                gulclockset
  *(COMMON)
- COMMON         0x000000002000028c        0x4 ./CMSIS/EFM32WG/system_efm32wg.o
-                0x000000002000028c                SystemCoreClock
-                0x0000000020000290                . = ALIGN (0x4)
-                0x0000000020000290                __bss_end__ = .
+ COMMON         0x0000000020000290        0x4 ./CMSIS/EFM32WG/system_efm32wg.o
+                0x0000000020000290                SystemCoreClock
+                0x0000000020000294                . = ALIGN (0x4)
+                0x0000000020000294                __bss_end__ = .
 
-.heap           0x0000000020000290      0xc00
-                0x0000000020000290                __HeapBase = .
-                0x0000000020000290                __end__ = .
-                0x0000000020000290                end = __end__
-                0x0000000020000290                _end = __end__
+.heap           0x0000000020000298      0xc00
+                0x0000000020000298                __HeapBase = .
+                0x0000000020000298                __end__ = .
+                0x0000000020000298                end = __end__
+                0x0000000020000298                _end = __end__
  *(.heap*)
- .heap          0x0000000020000290      0xc00 ./CMSIS/EFM32WG/startup_efm32wg.o
-                0x0000000020000e90                __HeapLimit = .
+ .heap          0x0000000020000298      0xc00 ./CMSIS/EFM32WG/startup_efm32wg.o
+                0x0000000020000e98                __HeapLimit = .
 
-.stack_dummy    0x0000000020000290      0x400
+.stack_dummy    0x0000000020000298      0x400
  *(.stack*)
- .stack         0x0000000020000290      0x400 ./CMSIS/EFM32WG/startup_efm32wg.o
+ .stack         0x0000000020000298      0x400 ./CMSIS/EFM32WG/startup_efm32wg.o
                 0x0000000020008000                __StackTop = (ORIGIN (RAM) + 0x8000)
                 0x0000000020007c00                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x0000000020008000                PROVIDE (__stack, __StackTop)
@@ -774,18 +787,18 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .comment       0x0000000000000000       0x71 ./src/epsilometer_coms.o
  .comment       0x0000000000000000       0x71 ./src/epsilometer_main.o
 
-.debug_line     0x0000000000000000     0x2d24
+.debug_line     0x0000000000000000     0x2daf
  .debug_line    0x0000000000000000       0xdf ./CMSIS/EFM32WG/startup_efm32wg.o
  .debug_line    0x00000000000000df      0x3d7 ./CMSIS/EFM32WG/system_efm32wg.o
  .debug_line    0x00000000000004b6      0xa16 ./emlib/em_cmu.o
  .debug_line    0x0000000000000ecc      0x5db ./emlib/em_emu.o
  .debug_line    0x00000000000014a7      0x514 ./emlib/em_gpio.o
  .debug_line    0x00000000000019bb      0x69b ./emlib/em_usart.o
- .debug_line    0x0000000000002056      0x544 ./src/epsilometer_analog.o
- .debug_line    0x000000000000259a      0x3ae ./src/epsilometer_coms.o
- .debug_line    0x0000000000002948      0x3dc ./src/epsilometer_main.o
+ .debug_line    0x0000000000002056      0x545 ./src/epsilometer_analog.o
+ .debug_line    0x000000000000259b      0x3ae ./src/epsilometer_coms.o
+ .debug_line    0x0000000000002949      0x466 ./src/epsilometer_main.o
 
-.debug_info     0x0000000000000000     0x6400
+.debug_info     0x0000000000000000     0x6976
  .debug_info    0x0000000000000000       0xf9 ./CMSIS/EFM32WG/startup_efm32wg.o
  .debug_info    0x00000000000000f9      0x746 ./CMSIS/EFM32WG/system_efm32wg.o
  .debug_info    0x000000000000083f     0x11f6 ./emlib/em_cmu.o
@@ -794,9 +807,9 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .debug_info    0x0000000000002e60      0xee1 ./emlib/em_usart.o
  .debug_info    0x0000000000003d41     0x1293 ./src/epsilometer_analog.o
  .debug_info    0x0000000000004fd4      0xabb ./src/epsilometer_coms.o
- .debug_info    0x0000000000005a8f      0x971 ./src/epsilometer_main.o
+ .debug_info    0x0000000000005a8f      0xee7 ./src/epsilometer_main.o
 
-.debug_abbrev   0x0000000000000000     0x1034
+.debug_abbrev   0x0000000000000000     0x10ea
  .debug_abbrev  0x0000000000000000       0x14 ./CMSIS/EFM32WG/startup_efm32wg.o
  .debug_abbrev  0x0000000000000014      0x1a3 ./CMSIS/EFM32WG/system_efm32wg.o
  .debug_abbrev  0x00000000000001b7      0x2ed ./emlib/em_cmu.o
@@ -805,9 +818,9 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .debug_abbrev  0x00000000000008c3      0x1dd ./emlib/em_usart.o
  .debug_abbrev  0x0000000000000aa0      0x26b ./src/epsilometer_analog.o
  .debug_abbrev  0x0000000000000d0b      0x1de ./src/epsilometer_coms.o
- .debug_abbrev  0x0000000000000ee9      0x14b ./src/epsilometer_main.o
+ .debug_abbrev  0x0000000000000ee9      0x201 ./src/epsilometer_main.o
 
-.debug_aranges  0x0000000000000000      0x4b0
+.debug_aranges  0x0000000000000000      0x4d8
  .debug_aranges
                 0x0000000000000000       0x20 ./CMSIS/EFM32WG/startup_efm32wg.o
  .debug_aranges
@@ -825,9 +838,9 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .debug_aranges
                 0x0000000000000450       0x38 ./src/epsilometer_coms.o
  .debug_aranges
-                0x0000000000000488       0x28 ./src/epsilometer_main.o
+                0x0000000000000488       0x50 ./src/epsilometer_main.o
 
-.debug_loc      0x0000000000000000     0x2744
+.debug_loc      0x0000000000000000     0x28ec
  .debug_loc     0x0000000000000000      0x31c ./CMSIS/EFM32WG/system_efm32wg.o
  .debug_loc     0x000000000000031c      0xc6c ./emlib/em_cmu.o
  .debug_loc     0x0000000000000f88      0x5a0 ./emlib/em_emu.o
@@ -835,9 +848,9 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .debug_loc     0x00000000000018f8      0x72e ./emlib/em_usart.o
  .debug_loc     0x0000000000002026      0x548 ./src/epsilometer_analog.o
  .debug_loc     0x000000000000256e      0x158 ./src/epsilometer_coms.o
- .debug_loc     0x00000000000026c6       0x7e ./src/epsilometer_main.o
+ .debug_loc     0x00000000000026c6      0x226 ./src/epsilometer_main.o
 
-.debug_ranges   0x0000000000000000      0x410
+.debug_ranges   0x0000000000000000      0x438
  .debug_ranges  0x0000000000000000       0x60 ./CMSIS/EFM32WG/system_efm32wg.o
  .debug_ranges  0x0000000000000060      0x140 ./emlib/em_cmu.o
  .debug_ranges  0x00000000000001a0       0x98 ./emlib/em_emu.o
@@ -845,9 +858,9 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .debug_ranges  0x0000000000000298       0xb0 ./emlib/em_usart.o
  .debug_ranges  0x0000000000000348       0x88 ./src/epsilometer_analog.o
  .debug_ranges  0x00000000000003d0       0x28 ./src/epsilometer_coms.o
- .debug_ranges  0x00000000000003f8       0x18 ./src/epsilometer_main.o
+ .debug_ranges  0x00000000000003f8       0x40 ./src/epsilometer_main.o
 
-.debug_str      0x0000000000000000     0x28f0
+.debug_str      0x0000000000000000     0x292b
  .debug_str     0x0000000000000000      0x4ce ./CMSIS/EFM32WG/system_efm32wg.o
                                         0x54e (size before relaxing)
  .debug_str     0x00000000000004ce      0x9cc ./emlib/em_cmu.o
@@ -862,10 +875,10 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
                                        0x106b (size before relaxing)
  .debug_str     0x00000000000027e5       0x49 ./src/epsilometer_coms.o
                                         0xd83 (size before relaxing)
- .debug_str     0x000000000000282e       0xc2 ./src/epsilometer_main.o
-                                        0x9af (size before relaxing)
+ .debug_str     0x000000000000282e       0xfd ./src/epsilometer_main.o
+                                        0xda2 (size before relaxing)
 
-.debug_frame    0x0000000000000000     0x12d4
+.debug_frame    0x0000000000000000     0x1390
  .debug_frame   0x0000000000000000      0x180 ./CMSIS/EFM32WG/system_efm32wg.o
  .debug_frame   0x0000000000000180      0x5c0 ./emlib/em_cmu.o
  .debug_frame   0x0000000000000740      0x29c ./emlib/em_emu.o
@@ -873,8 +886,8 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .debug_frame   0x0000000000000b9c      0x338 ./emlib/em_usart.o
  .debug_frame   0x0000000000000ed4      0x270 ./src/epsilometer_analog.o
  .debug_frame   0x0000000000001144       0xa8 ./src/epsilometer_coms.o
- .debug_frame   0x00000000000011ec       0x54 ./src/epsilometer_main.o
- .debug_frame   0x0000000000001240       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-exit.o)
- .debug_frame   0x0000000000001268       0x2c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-init.o)
- .debug_frame   0x0000000000001294       0x20 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-memset.o)
- .debug_frame   0x00000000000012b4       0x20 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libnosys.a(_exit.o)
+ .debug_frame   0x00000000000011ec      0x110 ./src/epsilometer_main.o
+ .debug_frame   0x00000000000012fc       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-exit.o)
+ .debug_frame   0x0000000000001324       0x2c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-init.o)
+ .debug_frame   0x0000000000001350       0x20 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x0000000000001370       0x20 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/4.9_2015q3/bin/../lib/gcc/arm-none-eabi/4.9.3/../../../../arm-none-eabi/lib/armv7e-m/softfp/libnosys.a(_exit.o)
