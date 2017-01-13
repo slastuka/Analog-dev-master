@@ -774,27 +774,27 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .comment       0x0000000000000000       0x71 ./src/epsilometer_coms.o
  .comment       0x0000000000000000       0x71 ./src/epsilometer_main.o
 
-.debug_line     0x0000000000000000     0x2d72
+.debug_line     0x0000000000000000     0x2d24
  .debug_line    0x0000000000000000       0xdf ./CMSIS/EFM32WG/startup_efm32wg.o
  .debug_line    0x00000000000000df      0x3d7 ./CMSIS/EFM32WG/system_efm32wg.o
  .debug_line    0x00000000000004b6      0xa16 ./emlib/em_cmu.o
  .debug_line    0x0000000000000ecc      0x5db ./emlib/em_emu.o
  .debug_line    0x00000000000014a7      0x514 ./emlib/em_gpio.o
  .debug_line    0x00000000000019bb      0x69b ./emlib/em_usart.o
- .debug_line    0x0000000000002056      0x55e ./src/epsilometer_analog.o
- .debug_line    0x00000000000025b4      0x3c8 ./src/epsilometer_coms.o
- .debug_line    0x000000000000297c      0x3f6 ./src/epsilometer_main.o
+ .debug_line    0x0000000000002056      0x544 ./src/epsilometer_analog.o
+ .debug_line    0x000000000000259a      0x3ae ./src/epsilometer_coms.o
+ .debug_line    0x0000000000002948      0x3dc ./src/epsilometer_main.o
 
-.debug_info     0x0000000000000000     0x641a
- .debug_info    0x0000000000000000      0x113 ./CMSIS/EFM32WG/startup_efm32wg.o
- .debug_info    0x0000000000000113      0x746 ./CMSIS/EFM32WG/system_efm32wg.o
- .debug_info    0x0000000000000859     0x11f6 ./emlib/em_cmu.o
- .debug_info    0x0000000000001a4f      0xdd1 ./emlib/em_emu.o
- .debug_info    0x0000000000002820      0x65a ./emlib/em_gpio.o
- .debug_info    0x0000000000002e7a      0xee1 ./emlib/em_usart.o
- .debug_info    0x0000000000003d5b     0x1293 ./src/epsilometer_analog.o
- .debug_info    0x0000000000004fee      0xabb ./src/epsilometer_coms.o
- .debug_info    0x0000000000005aa9      0x971 ./src/epsilometer_main.o
+.debug_info     0x0000000000000000     0x6400
+ .debug_info    0x0000000000000000       0xf9 ./CMSIS/EFM32WG/startup_efm32wg.o
+ .debug_info    0x00000000000000f9      0x746 ./CMSIS/EFM32WG/system_efm32wg.o
+ .debug_info    0x000000000000083f     0x11f6 ./emlib/em_cmu.o
+ .debug_info    0x0000000000001a35      0xdd1 ./emlib/em_emu.o
+ .debug_info    0x0000000000002806      0x65a ./emlib/em_gpio.o
+ .debug_info    0x0000000000002e60      0xee1 ./emlib/em_usart.o
+ .debug_info    0x0000000000003d41     0x1293 ./src/epsilometer_analog.o
+ .debug_info    0x0000000000004fd4      0xabb ./src/epsilometer_coms.o
+ .debug_info    0x0000000000005a8f      0x971 ./src/epsilometer_main.o
 
 .debug_abbrev   0x0000000000000000     0x1034
  .debug_abbrev  0x0000000000000000       0x14 ./CMSIS/EFM32WG/startup_efm32wg.o
@@ -847,7 +847,7 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
  .debug_ranges  0x00000000000003d0       0x28 ./src/epsilometer_coms.o
  .debug_ranges  0x00000000000003f8       0x18 ./src/epsilometer_main.o
 
-.debug_str      0x0000000000000000     0x290a
+.debug_str      0x0000000000000000     0x28f0
  .debug_str     0x0000000000000000      0x4ce ./CMSIS/EFM32WG/system_efm32wg.o
                                         0x54e (size before relaxing)
  .debug_str     0x00000000000004ce      0x9cc ./emlib/em_cmu.o
@@ -858,12 +858,12 @@ OUTPUT(Analog-dev-master.axf elf32-littlearm)
                                         0x631 (size before relaxing)
  .debug_str     0x00000000000017cc      0x9c2 ./emlib/em_usart.o
                                         0xe0a (size before relaxing)
- .debug_str     0x000000000000218e      0x671 ./src/epsilometer_analog.o
-                                       0x1085 (size before relaxing)
- .debug_str     0x00000000000027ff       0x49 ./src/epsilometer_coms.o
-                                        0xd9d (size before relaxing)
- .debug_str     0x0000000000002848       0xc2 ./src/epsilometer_main.o
-                                        0x9c9 (size before relaxing)
+ .debug_str     0x000000000000218e      0x657 ./src/epsilometer_analog.o
+                                       0x106b (size before relaxing)
+ .debug_str     0x00000000000027e5       0x49 ./src/epsilometer_coms.o
+                                        0xd83 (size before relaxing)
+ .debug_str     0x000000000000282e       0xc2 ./src/epsilometer_main.o
+                                        0x9af (size before relaxing)
 
 .debug_frame    0x0000000000000000     0x12d4
  .debug_frame   0x0000000000000000      0x180 ./CMSIS/EFM32WG/system_efm32wg.o

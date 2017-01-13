@@ -1,6 +1,6 @@
 src/epsilometer_coms.o: ../src/epsilometer_coms.c \
- /Users/slastuka/SimplicityStudio/v4_workspace/Analog-dev-master/inc/ep_coms.h \
- /Users/slastuka/SimplicityStudio/v4_workspace/Analog-dev-master/inc/ep_common.h \
+ /Users/aleboyer/git/Analog-dev-master/inc/ep_coms.h \
+ /Users/aleboyer/git/Analog-dev-master/inc/ep_common.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/emlib/inc/em_gpio.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/em_device.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg842f256.h \
@@ -46,6 +46,7 @@ src/epsilometer_coms.o: ../src/epsilometer_coms.c \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_calibrate.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_dmareq.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_dmactrl.h \
+ /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_uart.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_af_ports.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_af_pins.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/emlib/inc/em_bus.h \
@@ -54,9 +55,9 @@ src/epsilometer_coms.o: ../src/epsilometer_coms.c \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/emlib/inc/em_cmu.h \
  /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_uart.h
 
-/Users/slastuka/SimplicityStudio/v4_workspace/Analog-dev-master/inc/ep_coms.h:
+/Users/aleboyer/git/Analog-dev-master/inc/ep_coms.h:
 
-/Users/slastuka/SimplicityStudio/v4_workspace/Analog-dev-master/inc/ep_common.h:
+/Users/aleboyer/git/Analog-dev-master/inc/ep_common.h:
 
 /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/emlib/inc/em_gpio.h:
 
@@ -147,6 +148,8 @@ src/epsilometer_coms.o: ../src/epsilometer_coms.c \
 /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_dmareq.h:
 
 /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_dmactrl.h:
+
+/Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_uart.h:
 
 /Applications/Simplicity\ Studio.app/Contents/Eclipse/developer/sdks/exx32/v5.0.0.0//platform/Device/SiliconLabs/EFM32WG/Include/efm32wg_af_ports.h:
 
