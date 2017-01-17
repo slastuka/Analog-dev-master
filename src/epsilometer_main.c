@@ -90,11 +90,14 @@ int main(void) {
     /* Initialize chip - handle erratas */
     CHIP_Init();
 
+
+	/* Use 14 MHZ HFRCO as core clock frequency*/
 	/* Use 14 MHZ HFRCO as core clock frequency*/
 	CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);
 	CMU_ClockEnable(cmuClock_GPIO, true);
 	CMU_ClockEnable(cmuClock_TIMER0, true);
 	CMU_ClockEnable(cmuClock_TIMER1, true);
+
 
 	// define GPIO pin mode
 	GPIO_PinModeSet(gpioPortE, 13, gpioModePushPull, 1); // Enable Analog power
@@ -104,22 +107,22 @@ int main(void) {
 	GPIO_PinModeSet(gpioPortA, 2,	gpioModePushPull, 1); // PA2 in output mode to send the MCLOCK  to ADC
 	GPIO_PinModeSet(gpioPortB, 7, gpioModePushPull, 1);   // PB7 in output mode to send the SYNC away
 
-	/* set up the 20 MHz clock */
-	CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_HFXOMODE_MASK)| CMU_CTRL_HFXOMODE_DIGEXTCLK;
+
 
     // Enable the External Oscillator , true for enabling the O and false to not wait
     CMU_OscillatorEnable(cmuOsc_HFXO,true,false);
-
     // Enable interrupts for HFXORDY
     CMU_IntEnable(CMU_IF_HFXORDY);
-
     // Enable CMU interrupt vector in NVIC
     NVIC_EnableIRQ(CMU_IRQn);
-
     // Wait for the HFXO Clock to be Stable - Or infinite in case of error
     while(gulclockset != 1);
-    CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_CLKOUTSEL0_MASK)| CMU_CTRL_CLKOUTSEL0_HFCLK16;
+	/* set up the 20 MHz clock */
+	CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_HFXOMODE_MASK)| CMU_CTRL_HFXOMODE_DIGEXTCLK;
+    CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_CLKOUTSEL0_MASK)| CMU_CTRL_CLKOUTSEL0_HFXO;
     CMU->ROUTE =(CMU->ROUTE &~_CMU_ROUTE_CLKOUT0PEN_MASK)| CMU_ROUTE_CLKOUT0PEN;
+
+
 
     for (int i=0;i<8;i++){
     	AD7124_ChipSelect(sensors[i], LHI); // bring them all high

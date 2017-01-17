@@ -60,10 +60,5 @@
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/Device/SiliconLabs/EFM32WG/Source/GCC/startup_efm32wg.S</locationURI>
 		</link>
-		<link>
-			<name>CMSIS/EFM32WG/system_efm32wg.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/platform/Device/SiliconLabs/EFM32WG/Source/system_efm32wg.c</locationURI>
-		</link>
 	</linkedResources>
 </projectDescription>
