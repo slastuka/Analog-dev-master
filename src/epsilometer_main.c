@@ -97,6 +97,7 @@ int main(void) {
 	CMU_ClockEnable(cmuClock_GPIO, true);
 	CMU_ClockEnable(cmuClock_TIMER0, true);
 	CMU_ClockEnable(cmuClock_TIMER1, true);
+	//TODO Enable WDOG with WDOG_CTRL.CLKSEL and ULFRCO
 
 
 	// define GPIO pin mode
@@ -106,11 +107,18 @@ int main(void) {
 	GPIO_PinModeSet(gpioPortF, 5, gpioModePushPull, 1); // Enable 485 Transmitter
 	GPIO_PinModeSet(gpioPortA, 2,	gpioModePushPull, 1); // PA2 in output mode to send the MCLOCK  to ADC
 	GPIO_PinModeSet(gpioPortB, 7, gpioModePushPull, 1);   // PB7 in output mode to send the SYNC away
+	//TODO need to move SYNC pin to alternate location PE10 if the ULFRXO is used for the watchdog
 
 
 
     // Enable the External Oscillator , true for enabling the O and false to not wait
     CMU_OscillatorEnable(cmuOsc_HFXO,true,false);
+    //TODO CMU_HFCORECLKDIV=2 to halve the HF core frequency,
+    //TODO CMU_HFPERCLKDIV=2 to halve the peripheral clk
+    //TODO CMU_CMU_HFCORECLKEN0 to LE interface clock for the watchdog
+    //TODO Make sure core clk freq is greater than or equal to the peripheral clk
+
+
     // Enable interrupts for HFXORDY
     CMU_IntEnable(CMU_IF_HFXORDY);
     // Enable CMU interrupt vector in NVIC
@@ -121,6 +129,14 @@ int main(void) {
 	CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_HFXOMODE_MASK)| CMU_CTRL_HFXOMODE_DIGEXTCLK;
     CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_CLKOUTSEL0_MASK)| CMU_CTRL_CLKOUTSEL0_HFXO;
     CMU->ROUTE =(CMU->ROUTE &~_CMU_ROUTE_CLKOUT0PEN_MASK)| CMU_ROUTE_CLKOUT0PEN;
+
+    /* Watchdog Setup */
+    /* WDOGtimeout = (2^(3+PERSEL) + 1)/f */
+    //TODO WDOG_CRTL EN=1
+    //TODO if(WDOG_SYNCBUSY_CTRL)  // do not write watchdog registers until it is enabled (SYNCBUSY low)
+    //TODO 		WDOG_CRTL PERSEL= 15 // 256000 clk cycles before watchdog timeout
+    //TODO 		WDOG_CTRL DEBUGRUN=0
+    //TODO 		WDOG_CMD CLEAR=1
 
 
 
@@ -156,6 +172,9 @@ int main(void) {
 	AD7124 TEMP_SETUP = COMMON_SETUP;
 	TEMP_SETUP.CHANNEL_0 = AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1);
 
+	//sml unipolar for analog test dev board (with grounded AINM)
+
+
 	AD7124 SHR_SETUP = COMMON_SETUP;
 	SHR_SETUP.CHANNEL_0 = AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1);
 	SHR_SETUP.CONFIG_0 = AD7124_CONFIG_UNIPOLAR;  //sml added this for analog test dev board (with grounded AINM)
@@ -169,9 +188,6 @@ int main(void) {
 
 	AD7124 OFF_SETUP = AD7124_RESET_DEFAULT;
 	OFF_SETUP.ADC_CONTROL = OFF_SETUP.ADC_CONTROL | AD7124_CTRL_PWRDOWN_MODE;
-
-
-
 
 
 	//set up timer MCLOCK and SYNC

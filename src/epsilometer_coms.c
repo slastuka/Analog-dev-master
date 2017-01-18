@@ -20,7 +20,7 @@
 *******************************************************************************/
 
 void UART_Setup() {
-	/*UART1 shit*/
+	/*UART1 setup*/
 	CMU_ClockEnable(cmuClock_USART1, true); // Enable clock for USART1 module
 	GPIO_PinModeSet(gpioPortD, 7, gpioModePushPull, 1); // TX
 	GPIO_PinModeSet(gpioPortD, 6, gpioModeInput, 0); // RX

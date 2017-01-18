@@ -54,7 +54,7 @@ typedef struct epsiSetup {
 0xb,                             \
 0x13,                            \
 1000000,                         \
-115200,                          \
+460800,                          \
 0                                \
 }
 
