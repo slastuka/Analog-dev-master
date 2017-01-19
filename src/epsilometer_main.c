@@ -90,6 +90,8 @@ int main(void) {
     /* Initialize chip - handle erratas */
     CHIP_Init();
 
+
+	/* Use 14 MHZ HFRCO as core clock frequency*/
 	/* Use 14 MHZ HFRCO as core clock frequency*/
 	CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);
 	CMU_ClockEnable(cmuClock_GPIO, true);
@@ -107,8 +109,7 @@ int main(void) {
 	GPIO_PinModeSet(gpioPortB, 7, gpioModePushPull, 1);   // PB7 in output mode to send the SYNC away
 	//TODO need to move SYNC pin to alternate location PE10 if the ULFRXO is used for the watchdog
 
-	/* set up the 20 MHz clock */
-	CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_HFXOMODE_MASK)| CMU_CTRL_HFXOMODE_DIGEXTCLK;
+
 
     // Enable the External Oscillator , true for enabling the O and false to not wait
     CMU_OscillatorEnable(cmuOsc_HFXO,true,false);
@@ -120,13 +121,13 @@ int main(void) {
 
     // Enable interrupts for HFXORDY
     CMU_IntEnable(CMU_IF_HFXORDY);
-
     // Enable CMU interrupt vector in NVIC
     NVIC_EnableIRQ(CMU_IRQn);
-
     // Wait for the HFXO Clock to be Stable - Or infinite in case of error
     while(gulclockset != 1);
-    CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_CLKOUTSEL0_MASK)| CMU_CTRL_CLKOUTSEL0_HFCLK16;
+	/* set up the 20 MHz clock */
+	CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_HFXOMODE_MASK)| CMU_CTRL_HFXOMODE_DIGEXTCLK;
+    CMU->CTRL =(CMU->CTRL &~_CMU_CTRL_CLKOUTSEL0_MASK)| CMU_CTRL_CLKOUTSEL0_HFXO;
     CMU->ROUTE =(CMU->ROUTE &~_CMU_ROUTE_CLKOUT0PEN_MASK)| CMU_ROUTE_CLKOUT0PEN;
 
     /* Watchdog Setup */
@@ -136,6 +137,8 @@ int main(void) {
     //TODO 		WDOG_CRTL PERSEL= 15 // 256000 clk cycles before watchdog timeout
     //TODO 		WDOG_CTRL DEBUGRUN=0
     //TODO 		WDOG_CMD CLEAR=1
+
+
 
     for (int i=0;i<8;i++){
     	AD7124_ChipSelect(sensors[i], LHI); // bring them all high
