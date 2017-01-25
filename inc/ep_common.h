@@ -45,7 +45,7 @@ typedef struct epsiSetup {
 
 #define EPSI_SETUP_DEFAULT       \
 {14000000,                       \
-2,                               \
+3,                               \
 3,                               \
 3,								 \
 0x200,                           \

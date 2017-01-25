@@ -150,11 +150,11 @@ extern volatile SensorSpec_ptr sensors[8];
 #define AD7124_REG_GAIN0		0x31		// Ch 0 Gain Register						(RW, 24-bit)
 #define AD7124_REG_GAIN1		0x32		// Ch 1 Gain Register						(RW, 24-bit)
 
-/* Communications Register Bit Designations (AD7124_REG_COMM) */
+/* TODO:  Communications Register Bit Designations (AD7124_REG_COMM) setup like ADC CTRL*/
 #define AD7124_COMM_WRITE			(0x0 << 6)						// Write Operation.
 #define AD7124_COMM_READ			(0x1 << 6)						// Read Operation.
 
-/* Status Register Bit Designations (AD7124_REG_STAT) */
+/* TODO:  Status Register Bit Designations (AD7124_REG_STAT) setup like ADC CTRL*/
 #define AD7124_STATUS_RDY				(1 << 7)			// Ready.
 #define AD7124_STATUS_ERROR				(1 << 6)			// ADC error bit.
 #define AD7124_STATUS_POR				(1 << 4)			// Power-on Reset Flag
@@ -163,32 +163,56 @@ extern volatile SensorSpec_ptr sensors[8];
 #define AD7124_STATUS_CH(x)				(x)					// Channel 0-15.
 
 /* Adc Control Register */
-#define AD7124_CTRL_DEFAULT_MASK			(0x0000)
-#define AD7124_CTRL_DOUT_RDY_DELAY			(1 << 12)
-#define AD7124_CTRL_CONT_READ(x)			(x << 11)
-#define AD7124_CTRL_DATA_STATUS(x)			(x << 10)
-#define AD7124_CTRL_CS_EN(x)				(x << 9)
-#define AD7124_CTRL_REF_EN(x)				(x << 8)
+#define AD7124_CTRL_DEFAULT_MASK			(0x0000)	//Valid bits 0:12
 
-#define AD7124_CTRL_PWR_MASK				(0x3 << 6)
-#define AD7124_CTRL_LOW_PWR					(0 << 6)
-#define AD7124_CTRL_MID_PWR					(1 << 6)
-#define AD7124_CTRL_HIG_PWR					(2 << 6)
+#define AD7124_CTRL_DOUT_RDY_DELAY_MASK		12  //Increase delay to 100ns for last SCK to RDY high time
+#define AD7124_CTRL_DOUT_RDY_DELAY_NUM_BITS	1
+#define AD7124_CTRL_DOUT_RDY_DELAY			1
+#define AD7124_CTRL_DOUT_RDY_NO_DELAY		0
 
-#define AD7124_CTRL_MODE_MASK				(0xF << 2)
-#define AD7124_CTRL_CONT_MODE				(0x0 << 2)
-#define AD7124_CTRL_SINGLE_MODE				(0x1 << 2)
-#define AD7124_CTRL_STANDBY_MODE			(0x2 << 2)
-#define AD7124_CTRL_PWRDOWN_MODE			(0x3 << 2)
-#define AD7124_CTRL_IDLE_MODE				(0x4 << 2)
+#define AD7124_CTRL_CONT_READ_MASK			11  //Enabling removes the need for a MOSI address before
+#define AD7124_CTRL_CONT_READ_NUM_BITS		1	//clocking out data
+#define AD7124_CTRL_CONT_READ_ENABLE		1
+#define AD7124_CTRL_CONT_READ_DISABLE		0
 
-#define AD7124_CTRL_CLKSEL_MASK				(0x3 << 0)
-#define AD7124_CTRL_CLKSEL(x)				(x & 0x03) /*	0 = Internal 614kHz clock, no clk out
-													        1 = Internal 614kHz clock, clk pin out
-													        2 = external 614kHz clock
-													        3 = external 614kHz clock / 4	*/
+#define AD7124_CTRL_DATA_STATUS_MASK		10  //Output status after each data read
+#define AD7124_CTRL_DATA_STATUS_NUM_BITS	1
+#define AD7124_CTRL_DATA_STATUS_ENABLE		1
+#define AD7124_CTRL_DATA_STATUS_DISABLE		0
 
-/* IO_Control_1 Register bits */
+#define AD7124_CTRL_CS_EN_MASK				9   //Enabling keeps DOUT from changing to RDY logic after
+#define AD7124_CTRL_CS_EN_NUM_BITS			1	//last SCK with CS still low
+#define AD7124_CTRL_CS_EN_ENABLE			1   //This is useful for diagnostic error output
+#define AD7124_CTRL_CS_EN_DISABLE			0
+
+#define AD7124_CTRL_REF_EN_MASK				8   //Enable to turn on internal AVdd reference
+#define AD7124_CTRL_REF_EN_NUM_BITS			1	//and provide reference on REFOUT pin
+#define AD7124_CTRL_REF_EN_ENABLE			1
+#define AD7124_CTRL_REF_EN_DISABLE			0
+
+#define AD7124_CTRL_POWER_MODE_MASK			6
+#define AD7124_CTRL_POWER_MODE_NUM_BITS		2
+#define AD7124_CTRL_POWER_MODE_HIGH			3	//Either high works the same, I think
+#define AD7124_CTRL_POWER_MODE_HIGH			2
+#define AD7124_CTRL_POWER_MODE_MID			1
+#define AD7124_CTRL_POWER_MODE_LOW			0
+
+#define AD7124_CTRL_MODE_MASK				2	//Conversion, Calibration, Power-down modes
+#define AD7124_CTRL_MODE_NUM_BITS			4
+#define AD7124_CTRL_MODE_CONTINUOUS			0	//Continuous (default)
+#define AD7124_CTRL_MODE_SINGLE				1	//Single Conversion
+#define AD7124_CTRL_MODE_STANDBY			2	//Standby
+#define AD7124_CTRL_MODE_POWER_DOWN			3	//Power-down
+												//TODO: all the other modes of operation
+
+#define AD7124_CTRL_CLKSEL_MASK				0
+#define AD7124_CTRL_CLKSEL_NUM_BITS			2
+#define AD7124_CTRL_CLKSEL_INT				0	//Internal 614kHz clock, no clk out
+#define AD7124_CTRL_CLKSEL_INT_OUT			1	//Internal 614kHz clock, clk pin out
+#define AD7124_CTRL_CLKSEL_EXT				2	//External 614kHz clock (make sure its between 585 and 630KHz)
+#define AD7124_CTRL_CLKSEL_EXT_DIV4			3	//External clock gets internally divided by 4
+
+/* TODO: IO_Control_1 Register bits defined like AD7124 CTRL */
 #define AD7124_IO_CTRL1_GPIO_DAT2     (1 << 23)
 #define AD7124_IO_CTRL1_GPIO_DAT1     (1 << 22)
 #define AD7124_IO_CTRL1_GPIO_CTRL2    (1 << 19)
@@ -199,7 +223,7 @@ extern volatile SensorSpec_ptr sensors[8];
 #define AD7124_IO_CTRL1_IOUT_CH1(x)   (((x) & 0xF) << 4)
 #define AD7124_IO_CTRL1_IOUT_CH0(x)   (((x) & 0xF) << 0)
 
-/* IO_Control_2 Register bits */
+/* TODO: IO_Control_2 Register bits defined like AD7124 CTRL */
 #define AD7124_IO_CTRL2_GPIO_VBIAS7   (1 << 15)
 #define AD7124_IO_CTRL2_GPIO_VBIAS6   (1 << 14)
 #define AD7124_IO_CTRL2_GPIO_VBIAS5   (1 << 11)
@@ -209,11 +233,11 @@ extern volatile SensorSpec_ptr sensors[8];
 #define AD7124_IO_CTRL2_GPIO_VBIAS1   (1 << 1)
 #define AD7124_IO_CTRL2_GPIO_VBIAS0   (1 << 0)
 
-/* ID Register bits */
+/* TODO: ID Register bits defined like AD7124 CTRL */
 #define AD7124_ID_REG_DEVICE_ID(x)   (((x) & 0xF) << 4)
 #define AD7124_ID_REG_SILICON_REV(x) (((x) & 0xF) << 0)
 
-/* Error Register bits */
+/* TODO: Error Register bits defined like AD7124 CTRL */
 #define AD7124_ERR_REG_LDO_CAP_ERR        (1 << 19)
 #define AD7124_ERR_REG_ADC_CAL_ERR        (1 << 18)
 #define AD7124_ERR_REG_ADC_CONV_ERR       (1 << 17)
@@ -232,7 +256,7 @@ extern volatile SensorSpec_ptr sensors[8];
 #define AD7124_ERR_REG_SPI_CRC_ERR        (1 << 2)
 #define AD7124_ERR_REG_MM_CRC_ERR         (1 << 1)
 
-/* Error_En Register bits */
+/* TODO: Error_En Register bits defined like AD7124 CTRL */
 #define AD7124_ERREN_REG_MCLK_CNT_EN           (1 << 22)
 #define AD7124_ERREN_REG_LDO_CAP_CHK_TEST_EN   (1 << 21)
 #define AD7124_ERREN_REG_LDO_CAP_CHK(x)        (((x) & 0x3) << 19)
@@ -256,33 +280,57 @@ extern volatile SensorSpec_ptr sensors[8];
 #define AD7124_ERREN_REG_MM_CRC_ERR_EN         (1 << 1)
 
 /* Channel Register: AD7124_CONF_CHAN(x) options */
+#define AD7124_CH0_DEFAULT_MASK			(0x8000)	//Valid bits 15:0
+													//Bit15 CH0 defaults ON, other CH Bit15 default OFF
 
-#define AD7124_CH_EN						(0x1 << 15)
-#define AD7124_CH_DIS						(0x0 << 15)
-#define AD7124_CH_SETUP(x)					(((x) & 0x7) << 12)
-#define AD7124_CH_AINP(x)					(((x) & 0x1F) << 5)
-#define AD7124_CH_AINM(x)					(((x) & 0x1F) << 0)
+#define AD7124_CH0_EN_MASK					15		//Enables the channel setup
+#define AD7124_CH0_EN_NUM_BITS				1
+#define AD7124_CH0_ENABLE					1
+#define AD7124_CH0_DISABLE					0
 
-#define AD7124_CH_AVSS						0x11
-#define AD7124_CH_DGND						0x13
-#define AD7124_CH_TEMP_SENSOR				0x10
-#define	AD7124_CH_INT_REF					0x12
+#define AD7124_CH0_SETUP_MASK				12		//Chooses the Channel Setup number
+#define AD7124_CH0_SETUP_NUM_BITS			3
+#define AD7124_CH0_SETUP_0					0		//SETUP 1 of 8
+#define AD7124_CH0_SETUP_1					1		//SETUP 2 of 8
+#define AD7124_CH0_SETUP_2					2		//SETUP 3 of 8
+#define AD7124_CH0_SETUP_3					3		//SETUP 4 of 8
+#define AD7124_CH0_SETUP_4					4		//SETUP 5 of 8
+#define AD7124_CH0_SETUP_5					5		//SETUP 6 of 8
+#define AD7124_CH0_SETUP_6					6		//SETUP 7 of 8
+#define AD7124_CH0_SETUP_7					7		//SETUP 8 of 8
 
+#define AD7124_CH_AINP_MASK					5
+#define AD7124_CH_AINP_NUM_BITS				5
+#define AD7124_CH_AINP_AIN0					0
+#define AD7124_CH_AINP_AIN1					1
+#define AD7124_CH_AINP_INT_REF				18
+#define AD7124_CH_AINP_TEMP_SENSOR			16
+//TODO: remaining channels
+
+#define AD7124_CH_AINM_MASK					0
+#define AD7124_CH_AINM_NUM_BITS				5
+#define AD7124_CH_AINM_AIN1					0
+#define AD7124_CH_AINM_AVSS					17
+#define AD7124_CH_AINM_TEMP_SENSOR			16
+//TODO: remaining channels
 
 /* Configuration Register Bit Designations (AD7124_REG_CONF) */
-#define AD7124_CONFIG_DEFAULT_MASK			(0x0860)
-#define AD7124_CONFIG_BIPOLAR				(1 << 11)            // Bipolar on/off.
-#define AD7124_CONFIG_UNIPOLAR				(0 << 11)            // Bipolar on/off.
+#define AD7124_CONFIG_DEFAULT_MASK			(0x0860)  		//Bits 11:0 are valid
+
+#define AD7124_CONFIG_BIPOLAR_MASK			11		// Bipolar/Unipolar on/off.
+#define AD7124_CONFIG_BIPOLAR_NUM_BITS		1
+#define AD7124_CONFIG_BIPOLAR_ENABLE		1
+#define AD7124_CONFIG_BIPOLAR_DISABLE		0		// Unipolar
 
 #define AD7124_CONFIG_BURNOUT_OFF      		(0x0 << 9)		// off
 #define AD7124_CONFIG_BURNOUT_05UA      	(0x1 << 9)		// 0.5uA
 #define AD7124_CONFIG_BURNOUT_2UA      		(0x2 << 9)		// 2uA
 #define AD7124_CONFIG_BURNOUT_4UA      		(0x3 << 9)		// 4uA
 
-#define AD7124_CONFIG_REF_BUFP(z)				(0xz << 7)		//Buffer ref posative input on/off
-#define AD7124_CONFIG_REF_BUFM(z)				(0xz << 6)		// Buffer ref negative input on/off
-#define AD7124_CONFIG_AIN_BUFP(z)				(0xz << 5)		// Buffer AIN positive input on/off
-#define AD7124_CONFIG_AIN_BUFM(z)				(0xz << 4)		// Buffer AIN negative input on/off
+#define AD7124_CONFIG_REF_BUFP(x)				(((x) & 0x1) << 7)		// Buffer ref posative input on/off
+#define AD7124_CONFIG_REF_BUFM(x)				(((x) & 0x1) << 6)		// Buffer ref negative input on/off
+#define AD7124_CONFIG_AIN_BUFP					(0x1 << 5)		// Buffer AIN positive input on/off
+#define AD7124_CONFIG_AIN_BUFM					(0x1 << 4)		// Buffer AIN negative input on/off
 
 #define AD7124_CONFIG_REFSEL1					(0x0 << 3) 		//Ref 1 Select
 #define AD7124_CONFIG_REFSEL2					(0x1 << 3)		// Ref 2 Select

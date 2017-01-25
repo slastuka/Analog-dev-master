@@ -1,19 +1,12 @@
 /**************************************************************************//**
  * @file
- * @brief Empty Project
+ * @brief Epsilometer Project
  * @author Energy Micro AS
  * @version 3.20.2
  ******************************************************************************
  * @section License
- * <b>(C) Copyright 2014 Silicon Labs, http://www.silabs.com</b>
- *******************************************************************************
- *
- * This file is licensed under the Silicon Labs Software License Agreement. See 
- * "http://developer.silabs.com/legal/version/v11/Silicon_Labs_Software_License_Agreement.txt"  
- * for details. Before using this software for any purpose, you must agree to the 
- * terms of that agreement.
- *
  ******************************************************************************/
+
 #include "em_device.h"
 #include "em_cmu.h"
 #include "em_gpio.h"
@@ -49,15 +42,24 @@ SensorSpec az     = {"AZ", AD7124_RESET_DEFAULT, {gpioPortA, 1}};  //PA1
 
 volatile SensorSpec_ptr sensors[8]={&fp07_1, &fp07_2, &shr_1, &shr_2, &con_1, &ax, &ay, &az};
 
-
 volatile uint32_t pendingSamples = 0; // counter in the background IRQ
 volatile uint32_t samplesSent    = 0;    // counter in the foreground IRQ
 volatile uint32_t numSync        = 0;    // number of sync signal sent
 volatile uint32_t flagSync       = 0;    // flag to reset pending sample in the interrupt.
 
-
 // Waiting Variable for Clock Setting
 volatile uint32_t gulclockset=0;
+
+// Register Bit Setting Routine
+void Set_Value_16Bit_Register(uint16_t* reg, uint16_t value, uint8_t nbits, uint8_t start_pos)
+{
+  int i, j;
+  uint16_t temp_value;
+  temp_value = value;  // use 16 bit temp register to shift into
+  for (i = 0, j = start_pos; i < nbits; i++, j++)
+    *reg |= (((temp_value >> i) & 1) << j); //find byte position then set bit
+}
+
 
 // CMU Interrupt Handler
 void CMU_IRQHandler(void)
@@ -90,7 +92,6 @@ int main(void) {
     /* Initialize chip - handle erratas */
     CHIP_Init();
 
-
 	/* Use 14 MHZ HFRCO as core clock frequency*/
 	/* Use 14 MHZ HFRCO as core clock frequency*/
 	CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFRCO);
@@ -98,7 +99,6 @@ int main(void) {
 	CMU_ClockEnable(cmuClock_TIMER0, true);
 	CMU_ClockEnable(cmuClock_TIMER1, true);
 	//TODO Enable WDOG with WDOG_CTRL.CLKSEL and ULFRCO
-
 
 	// define GPIO pin mode
 	GPIO_PinModeSet(gpioPortE, 13, gpioModePushPull, 1); // Enable Analog power
@@ -109,15 +109,12 @@ int main(void) {
 	GPIO_PinModeSet(gpioPortB, 7, gpioModePushPull, 1);   // PB7 in output mode to send the SYNC away
 	//TODO need to move SYNC pin to alternate location PE10 if the ULFRXO is used for the watchdog
 
-
-
     // Enable the External Oscillator , true for enabling the O and false to not wait
     CMU_OscillatorEnable(cmuOsc_HFXO,true,false);
     //TODO CMU_HFCORECLKDIV=2 to halve the HF core frequency,
     //TODO CMU_HFPERCLKDIV=2 to halve the peripheral clk
     //TODO CMU_CMU_HFCORECLKEN0 to LE interface clock for the watchdog
     //TODO Make sure core clk freq is greater than or equal to the peripheral clk
-
 
     // Enable interrupts for HFXORDY
     CMU_IntEnable(CMU_IF_HFXORDY);
@@ -137,8 +134,6 @@ int main(void) {
     //TODO 		WDOG_CRTL PERSEL= 15 // 256000 clk cycles before watchdog timeout
     //TODO 		WDOG_CTRL DEBUGRUN=0
     //TODO 		WDOG_CMD CLEAR=1
-
-
 
     for (int i=0;i<8;i++){
     	AD7124_ChipSelect(sensors[i], LHI); // bring them all high
@@ -170,21 +165,23 @@ int main(void) {
 	COMMON_SETUP.FILTER_0 = 0x06003C; // 0x3C for 320hz on sinc4 filter
 
 	AD7124 TEMP_SETUP = COMMON_SETUP;
-	TEMP_SETUP.CHANNEL_0 = AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1);
-
-	//sml unipolar for analog test dev board (with grounded AINM)
-
+	TEMP_SETUP.CHANNEL_0 = TEMP_SETUP.CHANNEL_0 | AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1);
 
 	AD7124 SHR_SETUP = COMMON_SETUP;
-	SHR_SETUP.CHANNEL_0 = AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1);
-	SHR_SETUP.CONFIG_0 = AD7124_CONFIG_UNIPOLAR;  //sml added this for analog test dev board (with grounded AINM)
+	//sml SHR_SETUP.CHANNEL_0 = SHR_SETUP.CHANNEL_0 | AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1);
+	//sml Unipolar added for analog test dev board (with grounded AINM).  However, why does Unipolar digital
+	//sml output read the same value (say..~1.25V) regardless of AINM(1) {SHR1-} or AINM(10) {AVss}
+	SHR_SETUP.CHANNEL_0 = AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(19);
+    SHR_SETUP.CONFIG_0 = SHR_SETUP.CONFIG_0 | AD7124_CONFIG_UNIPOLAR;
+	//sml SHR_SETUP.CONFIG_0 = SHR_SETUP.CONFIG_0 | AD7124_CONFIG_AIN_BUFP | AD7124_CONFIG_AIN_BUFM;
+	//sml SHR_SETUP.CONFIG_0 = SHR_SETUP.CONFIG_0 | AD7124_CONFIG_GAIN_2;  //sml gain 2 for SHR channels
 
 	AD7124 ACCL_SETUP = COMMON_SETUP;
-	ACCL_SETUP.CHANNEL_0 = AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1); //TODO: GND reference to refin1-
-	ACCL_SETUP.CONFIG_0 = AD7124_CONFIG_UNIPOLAR;
+	ACCL_SETUP.CHANNEL_0 = ACCL_SETUP.CHANNEL_0 | AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1); //TODO: GND reference to refin1-
+	ACCL_SETUP.CONFIG_0 = ACCL_SETUP.CONFIG_0 & AD7124_CONFIG_UNIPOLAR;
 
 	AD7124 COND_SETUP = COMMON_SETUP;
-	COND_SETUP.CHANNEL_0 = AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1);
+	COND_SETUP.CHANNEL_0 = COND_SETUP.CHANNEL_0 | AD7124_CH_EN | AD7124_CH_AINP(0) | AD7124_CH_AINM(1);
 
 	AD7124 OFF_SETUP = AD7124_RESET_DEFAULT;
 	OFF_SETUP.ADC_CONTROL = OFF_SETUP.ADC_CONTROL | AD7124_CTRL_PWRDOWN_MODE;

@@ -54,7 +54,7 @@
 /* SW footprint. */
 
 #ifndef EFM32_HFXO_FREQ
-#define EFM32_HFXO_FREQ (48000000UL)
+#define EFM32_HFXO_FREQ (20000000UL)
 #endif
 
 #define EFM32_HFRCO_MAX_FREQ (28000000UL)
