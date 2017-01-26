@@ -17,13 +17,15 @@
 #include "stdint.h"
 #include "stdlib.h"
 
+/* Register set and Bit Manipulation function prototypes */
+void Set_Value_16Bit_Register(uint16_t* reg, uint16_t value, uint16_t nbits, uint16_t start_pos);
+uint32_t Create_Mask(uint32_t nbits, uint32_t start_pos);
+uint32_t Data_Bit_Shift(uint32_t data, uint32_t start_pos);
+uint32_t Merge_Bits(uint32_t reg, uint32_t data, uint32_t mask);
+
 /*************************************************************************/
 /* define epsilometer parameters info to be put into the header data   */
 /*************************************************************************/
-
-//#define CHANNELS {&FP07_1, &SHR_1, &SHR_2, &CON_1, &AXL_X, &AXL_Y,&FP07_2, &AXL_Z}
-
-
 typedef struct epsiSetup {
 	uint32_t 	coreClock;
 	uint32_t 	numSensor;
@@ -41,11 +43,9 @@ typedef struct epsiSetup {
 
 
 // blockSize size of streamed data in samples number
-//
-
 #define EPSI_SETUP_DEFAULT       \
 {14000000,                       \
-3,                               \
+2,                               \
 3,                               \
 3,								 \
 0x200,                           \
@@ -62,8 +62,6 @@ typedef struct epsiSetup {
 /*************************************************************************/
 /**   define global external values  **********************************************/
 /*************************************************************************/
-
-
 uint32_t numChannel;          // 2 temp 2 shear 1 cond 3 accelerometer
 uint32_t byteSample;         // 4 bytes in numChannel uint32 channel
 uint32_t bufferSize;      // numChannel*maxSamples
@@ -76,14 +74,11 @@ uint32_t bufferSize;      // numChannel*maxSamples
  * the buffer is maxSample long
  */
 /*************************************************************************/
-
 volatile uint32_t * dataBuffer;
 volatile uint8_t * channelSample;
- extern volatile uint32_t pendingSamples; // counter in the background IRQ
- extern volatile uint32_t samplesSent;    // counter in the foreground IRQ
- extern volatile uint32_t flagSync;       // flag to reset pending sample in the interrupt.
- extern epsiSetupPtr boardSetup_ptr;       // flag to reset pending sample in the interrupt.
-
-
+extern volatile uint32_t pendingSamples; // counter in the background IRQ
+extern volatile uint32_t samplesSent;    // counter in the foreground IRQ
+extern volatile uint32_t flagSync;       // flag to reset pending sample in the interrupt.
+extern epsiSetupPtr boardSetup_ptr;       // flag to reset pending sample in the interrupt.
 
 #endif /* EP_COMMON_H_ */
