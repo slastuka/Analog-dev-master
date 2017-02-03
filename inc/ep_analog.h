@@ -308,7 +308,7 @@ extern volatile SensorSpec_ptr sensors[8];
 
 #define AD7124_CH_AINM_START_POSITION					0
 #define AD7124_CH_AINM_NUM_BITS				5
-#define AD7124_CH_AINM_AIN1					0
+#define AD7124_CH_AINM_AIN1					1
 #define AD7124_CH_AINM_AVSS					17
 #define AD7124_CH_AINM_TEMP_SENSOR			16
 //TODO: remaining channels
@@ -338,15 +338,15 @@ extern volatile SensorSpec_ptr sensors[8];
 #define AD7124_CONFIG_REF_BUFM_ON			1
 #define AD7124_CONFIG_REF_BUFM_OFF			0
 
-#define AD7124_CONFIG_REF_AINP_START_POSITION			6		// Analog In Buffer ref positive input on/off
-#define AD7124_CONFIG_REF_AINP_NUM_BITS		1
-#define AD7124_CONFIG_REF_AINP_ON			1
-#define AD7124_CONFIG_REF_AINP_OFF			0
+#define AD7124_CONFIG_AIN_BUFP_START_POSITION			6		// Analog In Buffer ref positive input on/off
+#define AD7124_CONFIG_AIN_BUFP_NUM_BITS		1
+#define AD7124_CONFIG_AIN_BUFP_ON			1
+#define AD7124_CONFIG_AIN_BUFP_OFF			0
 
-#define AD7124_CONFIG_REF_AINM_START_POSITION			5		// Analog In Buffer ref negative input on/off
-#define AD7124_CONFIG_REF_AINM_NUM_BITS		1
-#define AD7124_CONFIG_REF_AINM_ON			1
-#define AD7124_CONFIG_REF_AINM_OFF			0
+#define AD7124_CONFIG_AIN_BUFM_START_POSITION			5		// Analog In Buffer ref negative input on/off
+#define AD7124_CONFIG_AIN_BUFM_NUM_BITS		1
+#define AD7124_CONFIG_AIN_BUFM_ON			1
+#define AD7124_CONFIG_AIN_BUFM_OFF			0
 
 #define AD7124_CONFIG_REF_SEL_START_POSITION			3		// Analog In Buffer ref negative input on/off
 #define AD7124_CONFIG_REF_SEL_NUM_BITS		2		// Analog In Buffer ref negative input on/off
