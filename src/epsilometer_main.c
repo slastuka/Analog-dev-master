@@ -124,11 +124,13 @@ int main(void) {
 	//TODO Enable WDOG with WDOG_CTRL.CLKSEL and ULFRCO
 
 	// define GPIO pin mode
+	GPIO_PinModeSet(gpioPortA, 12,	gpioModePushPull, 1); // PA12 - Enable DC/DC SYNC pin for high current PWM mode
 	GPIO_PinModeSet(gpioPortE, 13, gpioModePushPull, 1); // Enable Analog power
 	GPIO_PinModeSet(gpioPortF, 3, gpioModePushPull, 1); // Enable 485 Driver
 	GPIO_PinModeSet(gpioPortF, 4, gpioModePushPull, 0); // Enable 485 Receiver power
 	GPIO_PinModeSet(gpioPortF, 5, gpioModePushPull, 1); // Enable 485 Transmitter
 	GPIO_PinModeSet(gpioPortA, 2,	gpioModePushPull, 1); // PA2 in output mode to send the MCLOCK  to ADC
+	GPIO_PinModeSet(gpioPortA, 12,	gpioModePushPull, 1); // PA12 to turn on DC/DC high current SYNC mode
 	GPIO_PinModeSet(gpioPortB, 7, gpioModePushPull, 1);   // PB7 in output mode to send the SYNC away
 	//TODO need to move SYNC pin to alternate location PE10 if the ULFRXO is used for the watchdog
 
@@ -187,7 +189,12 @@ int main(void) {
 	Set_Value_16Bit_Register(&COMMON_SETUP.ADC_CONTROL, AD7124_CTRL_REF_EN_ENABLE, AD7124_CTRL_REF_EN_NUM_BITS, AD7124_CTRL_REF_EN_START_POSITION);
 	Set_Value_16Bit_Register(&COMMON_SETUP.ADC_CONTROL, AD7124_CTRL_CLKSEL_EXT, AD7124_CTRL_CLKSEL_NUM_BITS, AD7124_CTRL_CLKSEL_START_POSITION);
 
-	COMMON_SETUP.FILTER_0 = 0x06003C; // 0x3C for 320hz on sinc4 filter
+	COMMON_SETUP.FILTER_0 = 0x06001E; // 0x1E for 640hz from sinc4 filter, with LP @ 147.2Hz
+//	COMMON_SETUP.FILTER_0 = 0x06003C; // 0x3C for 320hz from sinc4 filter, with LP @ 73.6Hz
+//	COMMON_SETUP.FILTER_0 = 0x060078; // 0x78 for 160hz from sinc4 filter, with LP @ 36.8Hz
+//	COMMON_SETUP.FILTER_0 = 0x800001; // 0x01 for 505hz from sinc4+sinc1 filter, with LP @ 222Hz
+//	COMMON_SETUP.FILTER_0 = 0x01001E; // 0x1E for 160hz from sinc4 filter + Fast Settling, with LP @ 147Hz
+//	COMMON_SETUP.FILTER_0 = 0x01000E; // 0x0E for 320hz from sinc4 filter + Fast Settling, with LP @ 294Hz
 
 	AD7124 TEMP_SETUP = COMMON_SETUP;
 	Set_Value_16Bit_Register(&TEMP_SETUP.CHANNEL_0, AD7124_CH_ENABLE, AD7124_CH_EN_NUM_BITS, AD7124_CH_EN_START_POSITION);
